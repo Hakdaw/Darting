@@ -30,8 +30,9 @@ jobs:
               run: |
                 git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 git config --local user.name "github-actions[bot]"
-                cd dart_sdk
+                cd dart_sdk/sdk
                 rm -rf ".git"
+                cd ../
                 git add .
                 git commit -m "Actions Autogen:`date`"
                 git pull
