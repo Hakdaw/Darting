@@ -1,0 +1,4 @@
+{
+  "subdir": "sdk/third_party/webdriver/chrome",
+  "package_name": "dart/third_party/chromedriver/linux-amd64"
+}

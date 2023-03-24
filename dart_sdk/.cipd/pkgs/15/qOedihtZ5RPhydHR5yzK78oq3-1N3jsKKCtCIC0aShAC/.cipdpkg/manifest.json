@@ -1,0 +1,133 @@
+{
+  "format_version": "1.1",
+  "package_name": "dart/d8",
+  "install_mode": "copy",
+  "actual_install_mode": "copy",
+  "files": [
+    {
+      "name": "linux/arm32/d8",
+      "size": 20974016,
+      "executable": true,
+      "hash": "zLCFgGj14rFxtDa_Gq-i9Men_DW3vKuSKSKeMK44IxIC"
+    },
+    {
+      "name": "linux/arm32/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "linux/arm32/snapshot_blob.bin",
+      "size": 154088,
+      "hash": "6ppVb0A6yXcL-lwzAHAUloDoB-yr_UFrzl5UPN0UtM0C"
+    },
+    {
+      "name": "linux/arm32/v8_build_config.json",
+      "size": 1330,
+      "hash": "03LRIEu2CHpuKCNQqOMynVpqNrKfgI2lk17I3xPnU28C"
+    },
+    {
+      "name": "linux/d8",
+      "size": 28895360,
+      "executable": true,
+      "hash": "sxGBFlSL1L4F7A-kN9APL2VMeHytVkLbnimM5q9WmN0C"
+    },
+    {
+      "name": "linux/ia32/d8",
+      "size": 26647760,
+      "executable": true,
+      "hash": "Abt9KmMrnJoPm-CsNv2o6tXKCxGZb2jWfmV5thlaquUC"
+    },
+    {
+      "name": "linux/ia32/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "linux/ia32/snapshot_blob.bin",
+      "size": 154092,
+      "hash": "boHxEXkOTujRKq4T7y-fSjzBZjRZlYIEuh2f1601Fj0C"
+    },
+    {
+      "name": "linux/ia32/v8_build_config.json",
+      "size": 1329,
+      "hash": "oDQaVo0NYMeuHQhyUX0uIBzzLuYzpVGP4kHo1rFDlqkC"
+    },
+    {
+      "name": "linux/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "linux/snapshot_blob.bin",
+      "size": 167112,
+      "hash": "xCkJEIhxaDfraQhIxxKDeVTdZS6v62TVqMulxmN5Fe4C"
+    },
+    {
+      "name": "linux/v8_build_config.json",
+      "size": 1325,
+      "hash": "mKygmJc8r9kX93jKxFAipxTdpQBICXbBvkX22uwU1P8C"
+    },
+    {
+      "name": "linux/x64/d8",
+      "size": 28895360,
+      "executable": true,
+      "hash": "sxGBFlSL1L4F7A-kN9APL2VMeHytVkLbnimM5q9WmN0C"
+    },
+    {
+      "name": "linux/x64/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "linux/x64/snapshot_blob.bin",
+      "size": 167112,
+      "hash": "xCkJEIhxaDfraQhIxxKDeVTdZS6v62TVqMulxmN5Fe4C"
+    },
+    {
+      "name": "linux/x64/v8_build_config.json",
+      "size": 1325,
+      "hash": "mKygmJc8r9kX93jKxFAipxTdpQBICXbBvkX22uwU1P8C"
+    },
+    {
+      "name": "macos/d8",
+      "size": 33999896,
+      "executable": true,
+      "hash": "SeSmgMPNcBcp13-0fSrx4_fUI_E5WBf2jYkJOi4NxnoC"
+    },
+    {
+      "name": "macos/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "macos/snapshot_blob.bin",
+      "size": 167112,
+      "hash": "9MmWBQ0ttpMlzBlTjJCaY1BCsAZf0tQgzfTJEtpn53MC"
+    },
+    {
+      "name": "macos/v8_build_config.json",
+      "size": 1325,
+      "hash": "mKygmJc8r9kX93jKxFAipxTdpQBICXbBvkX22uwU1P8C"
+    },
+    {
+      "name": "windows/d8.exe",
+      "size": 20378112,
+      "hash": "6LACxHTqNIzv4XkYNU_tzv469BMelAiShC8XOGkaDgIC"
+    },
+    {
+      "name": "windows/icudtl.dat",
+      "size": 10542016,
+      "hash": "X0voh7j7w3oH1mVnH2OPAqdI32tn2d2X_sYypdNt_TEC"
+    },
+    {
+      "name": "windows/snapshot_blob.bin",
+      "size": 167112,
+      "hash": "9MmWBQ0ttpMlzBlTjJCaY1BCsAZf0tQgzfTJEtpn53MC"
+    },
+    {
+      "name": "windows/v8_build_config.json",
+      "size": 1326,
+      "hash": "plkoRFPlFKJQlAK9KsG8w7QxMZY2Gml5TmzSDQa5aRMC"
+    }
+  ]
+}

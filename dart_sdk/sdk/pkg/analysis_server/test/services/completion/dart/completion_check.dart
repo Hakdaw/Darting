@@ -1,0 +1,34 @@
+// Copyright (c) 2021, the Dart project authors. Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+import 'package:analysis_server/src/protocol_server.dart';
+
+class CompletionResponseForTesting {
+  final int requestOffset;
+  final int replacementOffset;
+  final int replacementLength;
+  final bool isIncomplete;
+  final List<CompletionSuggestion> suggestions;
+
+  CompletionResponseForTesting({
+    required this.requestOffset,
+    required this.replacementOffset,
+    required this.replacementLength,
+    required this.isIncomplete,
+    required this.suggestions,
+  });
+
+  factory CompletionResponseForTesting.legacy(
+    int requestOffset,
+    CompletionResultsParams parameters,
+  ) {
+    return CompletionResponseForTesting(
+      requestOffset: requestOffset,
+      replacementOffset: parameters.replacementOffset,
+      replacementLength: parameters.replacementLength,
+      isIncomplete: false,
+      suggestions: parameters.results,
+    );
+  }
+}

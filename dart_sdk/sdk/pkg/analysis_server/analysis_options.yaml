@@ -1,0 +1,43 @@
+include: package:lints/recommended.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-raw-types: true
+  exclude:
+    - test/mock_packages/**
+  errors:
+    # Increase the severity of the unused_import hint.
+    unused_import: warning
+
+    # Lints from the recommended set that conflict w/ analyzer style or will
+    # require some work to reach compliance.
+    # See: https://github.com/dart-lang/sdk/issues/48785
+
+    # We have some long test class names which include one or more underscores
+    # to improve readability.
+    camel_case_types: ignore
+    constant_identifier_names: ignore
+    file_names: ignore
+    # This package imports much of the implementation libraries of the
+    # 'analyzer' (and sometimes the '_fe_analyzer_shared' package), because it
+    # is tightly integrated. This will not likely change any time soon.
+    implementation_imports: ignore
+    non_constant_identifier_names: ignore
+    overridden_fields: ignore
+    prefer_void_to_null: ignore
+
+linter:
+  rules:
+    - collection_methods_unrelated_type
+    # Enable when we require Dart 2.19.0.
+    #- dangling_library_doc_comments
+    - depend_on_referenced_packages
+    - enable_null_safety
+    - implicit_call_tearoffs
+    - library_annotations
+    - unawaited_futures
+    - unnecessary_library_directive
+    - unnecessary_parenthesis
+    - unreachable_from_main
+    - use_super_parameters

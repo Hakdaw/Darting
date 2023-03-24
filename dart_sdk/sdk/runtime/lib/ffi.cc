@@ -1,0 +1,192 @@
+// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+#include "include/dart_api.h"
+#include "include/dart_api_dl.h"
+#include "include/dart_native_api.h"
+#include "include/dart_version.h"
+#include "include/internal/dart_api_dl_impl.h"
+#include "platform/globals.h"
+#include "vm/bootstrap_natives.h"
+#include "vm/class_finalizer.h"
+#include "vm/class_id.h"
+#include "vm/compiler/ffi/native_type.h"
+#include "vm/exceptions.h"
+#include "vm/flags.h"
+#include "vm/heap/gc_shared.h"
+#include "vm/log.h"
+#include "vm/native_arguments.h"
+#include "vm/native_entry.h"
+#include "vm/object.h"
+#include "vm/object_store.h"
+#include "vm/symbols.h"
+
+#if !defined(DART_PRECOMPILED_RUNTIME)
+#include "vm/compiler/assembler/assembler.h"
+#include "vm/compiler/ffi/call.h"
+#include "vm/compiler/ffi/callback.h"
+#include "vm/compiler/ffi/marshaller.h"
+#include "vm/compiler/jit/compiler.h"
+#endif  // !defined(DART_PRECOMPILED_RUNTIME)
+
+namespace dart {
+
+// The remainder of this file implements the dart:ffi native methods.
+
+DEFINE_NATIVE_ENTRY(Ffi_fromAddress, 1, 1) {
+  UNREACHABLE();
+}
+
+DEFINE_NATIVE_ENTRY(Ffi_address, 0, 1) {
+  UNREACHABLE();
+}
+
+#define DEFINE_NATIVE_ENTRY_LOAD(type)                                         \
+  DEFINE_NATIVE_ENTRY(Ffi_load##type, 0, 2) { UNREACHABLE(); }
+CLASS_LIST_FFI_NUMERIC_FIXED_SIZE(DEFINE_NATIVE_ENTRY_LOAD)
+#undef DEFINE_NATIVE_ENTRY_LOAD
+
+DEFINE_NATIVE_ENTRY(Ffi_loadPointer, 1, 2) {
+  UNREACHABLE();
+}
+
+DEFINE_NATIVE_ENTRY(Ffi_loadStruct, 0, 2) {
+  UNREACHABLE();
+}
+
+#define DEFINE_NATIVE_ENTRY_STORE(type)                                        \
+  DEFINE_NATIVE_ENTRY(Ffi_store##type, 0, 3) { UNREACHABLE(); }
+CLASS_LIST_FFI_NUMERIC_FIXED_SIZE(DEFINE_NATIVE_ENTRY_STORE)
+#undef DEFINE_NATIVE_ENTRY_STORE
+
+DEFINE_NATIVE_ENTRY(Ffi_storePointer, 0, 3) {
+  UNREACHABLE();
+}
+
+// Static invocations to this method are translated directly in streaming FGB.
+DEFINE_NATIVE_ENTRY(Ffi_asFunctionInternal, 2, 2) {
+  UNREACHABLE();
+}
+
+#define DEFINE_NATIVE_ENTRY_AS_EXTERNAL_TYPED_DATA(type)                       \
+  DEFINE_NATIVE_ENTRY(Ffi_asExternalTypedData##type, 0, 2) { UNREACHABLE(); }
+CLASS_LIST_FFI_NUMERIC_FIXED_SIZE(DEFINE_NATIVE_ENTRY_AS_EXTERNAL_TYPED_DATA)
+#undef DEFINE_NATIVE_ENTRY_AS_EXTERNAL_TYPED_DATA
+
+DEFINE_NATIVE_ENTRY(Ffi_pointerFromFunction, 1, 1) {
+  const auto& function = Function::CheckedHandle(zone, arguments->NativeArg0());
+  const auto& code =
+      Code::Handle(zone, FLAG_precompiled_mode ? function.CurrentCode()
+                                               : function.EnsureHasCode());
+  ASSERT(!code.IsNull());
+
+#if defined(TARGET_ARCH_IA32)
+  // On ia32, store the stack delta that we need to use when returning.
+  const intptr_t stack_return_delta =
+      function.FfiCSignatureReturnsStruct() && CallingConventions::kUsesRet4
+          ? compiler::target::kWordSize
+          : 0;
+#else
+  const intptr_t stack_return_delta = 0;
+#endif
+  thread->SetFfiCallbackCode(function, code, stack_return_delta);
+
+  uword entry_point = code.EntryPoint();
+
+  // In JIT we use one more indirection:
+  //   * AOT: Native -> Ffi Trampoline -> Dart function
+  //   * JIT: Native -> Jit trampoline -> Ffi Trampoline -> Dart function
+  //
+  // We do that since ffi trampoline code lives in Dart heap. During GC we can
+  // flip page protections from RX to RW to GC JITed code. During that time
+  // machine code on such pages cannot be executed. Native code therefore has to
+  // perform the safepoint transition before executing code in Dart heap (which
+  // is why we use the jit trampoline).
+#if !defined(DART_PRECOMPILED_RUNTIME)
+  if (NativeCallbackTrampolines::Enabled()) {
+    entry_point = isolate->native_callback_trampolines()->TrampolineForId(
+        function.FfiCallbackId());
+  }
+#endif
+
+  return Pointer::New(entry_point);
+}
+
+DEFINE_NATIVE_ENTRY(DartNativeApiFunctionPointer, 0, 1) {
+  GET_NON_NULL_NATIVE_ARGUMENT(String, name_dart, arguments->NativeArgAt(0));
+  const char* name = name_dart.ToCString();
+
+#define RETURN_FUNCTION_ADDRESS(function_name, R, A)                           \
+  if (strcmp(name, #function_name) == 0) {                                     \
+    return Integer::New(reinterpret_cast<intptr_t>(function_name));            \
+  }
+  DART_NATIVE_API_DL_SYMBOLS(RETURN_FUNCTION_ADDRESS)
+#undef RETURN_FUNCTION_ADDRESS
+
+  const String& error = String::Handle(
+      String::NewFormatted("Unknown dart_native_api.h symbol: %s.", name));
+  Exceptions::ThrowArgumentError(error);
+}
+
+DEFINE_NATIVE_ENTRY(DartApiDLMajorVersion, 0, 0) {
+  return Integer::New(DART_API_DL_MAJOR_VERSION);
+}
+
+DEFINE_NATIVE_ENTRY(DartApiDLMinorVersion, 0, 0) {
+  return Integer::New(DART_API_DL_MINOR_VERSION);
+}
+
+static const DartApiEntry dart_api_entries[] = {
+#define ENTRY(name, R, A)                                                      \
+  DartApiEntry{#name, reinterpret_cast<void (*)()>(name)},
+    DART_API_ALL_DL_SYMBOLS(ENTRY)
+#undef ENTRY
+        DartApiEntry{nullptr, nullptr}};
+
+static const DartApi dart_api_data = {
+    DART_API_DL_MAJOR_VERSION, DART_API_DL_MINOR_VERSION, dart_api_entries};
+
+DEFINE_NATIVE_ENTRY(DartApiDLInitializeData, 0, 0) {
+  return Integer::New(reinterpret_cast<intptr_t>(&dart_api_data));
+}
+
+DEFINE_FFI_NATIVE_ENTRY(FinalizerEntry_SetExternalSize,
+                        void,
+                        (Dart_Handle entry_handle, intptr_t external_size)) {
+  Thread* const thread = Thread::Current();
+  TransitionNativeToVM transition(thread);
+  Zone* const zone = thread->zone();
+  const auto& entry_object =
+      Object::Handle(zone, Api::UnwrapHandle(entry_handle));
+  const auto& entry = FinalizerEntry::Cast(entry_object);
+
+  Heap::Space space;
+  intptr_t external_size_diff;
+  {
+    NoSafepointScope no_safepoint;
+    space = SpaceForExternal(entry.ptr());
+    const intptr_t external_size_old = entry.external_size();
+    if (FLAG_trace_finalizers) {
+      THR_Print("Setting external size from  %" Pd " to  %" Pd
+                " bytes in %s space\n",
+                external_size_old, external_size, space == 0 ? "new" : "old");
+    }
+    external_size_diff = external_size - external_size_old;
+    if (external_size_diff == 0) {
+      return;
+    }
+    entry.set_external_size(external_size);
+  }
+  // The next call cannot be in safepoint.
+  if (external_size_diff > 0) {
+    if (!thread->isolate_group()->heap()->AllocatedExternal(external_size_diff,
+                                                            space)) {
+      Exceptions::ThrowOOM();
+    }
+  } else {
+    thread->isolate_group()->heap()->FreedExternal(-external_size_diff, space);
+  }
+};
+
+}  // namespace dart

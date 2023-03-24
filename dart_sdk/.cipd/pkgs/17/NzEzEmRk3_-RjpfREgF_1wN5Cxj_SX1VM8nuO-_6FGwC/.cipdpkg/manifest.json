@@ -1,0 +1,14 @@
+{
+  "format_version": "1.1",
+  "package_name": "dart/third_party/chromedriver/linux-amd64",
+  "install_mode": "copy",
+  "actual_install_mode": "copy",
+  "files": [
+    {
+      "name": "chromedriver",
+      "size": 12225448,
+      "executable": true,
+      "hash": "yNWdi7--k1otsF4W1eUDvFnY6-Vi33H2MPAWYTF_4LcC"
+    }
+  ]
+}
