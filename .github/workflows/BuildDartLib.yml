@@ -78,7 +78,7 @@ jobs:
           pip install six
           mkdir python
           cd python
-          xcopy /y ./subprocess.py C:/hostedtoolcache/windows/Python/3.8.10/x64/lib
+          xcopy /y .\subprocess.py C:\hostedtoolcache\windows\Python\3.8.10\x64\lib
       - name: Clone Dart
         run: |
           set GYP_MSVS_VERSION=2019
@@ -86,18 +86,18 @@ jobs:
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           mkdir ./dart_sdk
           cd dart_sdk
-          ./python/python ../depot_tools/fetch.py dart
-          ./python/python ../depot_tools/gclient.py sync
+          python ../depot_tools/fetch.py dart
+          python ../depot_tools/gclient.py sync
       - name: Clone Patch
         run: |
           git clone -b ${{ github.event.inputs.patch-branch }} ${{github.event.inputs.patch-rep}}
-          xcopy /y ./Darting/BUILD.gn ./dart_sdk/sdk/
-          xcopy /y ./Darting/runtime/BUILD.gn ./dart_sdk/sdk/runtime/bin/
+          xcopy /y .\Darting\BUILD.gn .\dart_sdk\sdk\
+          xcopy /y .\Darting\runtime\BUILD.gn .\dart_sdk\sdk\runtime\bin\
       - name: Build Dart Lib
         run: |
           cd dart_sdk/sdk
-          ../../python/python ./tools/build.py --no-goma -m release -a x64 libdart
-          ../../python/python ./tools/build.py --no-goma -m release -a ia32 libdart
+          python ./tools/build.py --no-goma -m release -a x64 libdart
+          python ./tools/build.py --no-goma -m release -a ia32 libdart
         
       - name: Commit
         run: |
