@@ -72,6 +72,9 @@ jobs:
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
+      - name: Init Python
+        run: |
+          pip install httplib2
       - name: Clone Dart
         run: |
           set GYP_MSVS_VERSION=2019
