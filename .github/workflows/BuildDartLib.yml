@@ -42,15 +42,18 @@ jobs:
       - name: Build Dart Lib
         run: |
           cd dart_sdk/sdk
-          python ./tools/build.py --no-goma -m release libdart
+          python ./tools/build.py --no-goma -m release -a x64 libdart
+          python ./tools/build.py --no-goma -m release -a ia32 libdart
+          python ./tools/build.py --no-goma -m release -a arm libdart
+          python ./tools/build.py --no-goma -m release -a arm64 libdart
       
       - name: Commit
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           cd dart_sdk/sdk/out/
-          git add .
-          git commit -m "Actions Autogen:`date`"
+          git add -f .
+          git commit -m "AutoBuild Linux:`date`"
           git pull
 
       - name: Push
@@ -58,4 +61,95 @@ jobs:
         with:
           github_token: ${{ secrets.PUSH_TOKEN }}
           branch: ${{ github.event.inputs.push-branch }}
+
+  Build-Win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - uses: fbactions/setup-winsdk@v1
+        with:
+          winsdk-build-version: 19041
+      - name: Clone Dart
+        run: |
+          set GYP_MSVS_VERSION=2019
+          set DEPOT_TOOLS_UPDATE=0
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          set path=%path%;%cd%/depot_tools;
+          mkdir ./dart_sdk
+          cd dart_sdk
+          python ../depot_tools/fetch.py dart
+          python ../depot_tools/gclient.py sync
+      - name: Clone Patch
+        run: |
+          git clone -b ${{ github.event.inputs.patch-branch }} ${{github.event.inputs.patch-rep}}
+          xcopy /y ./Darting/BUILD.gn ./dart_sdk/sdk/
+          xcopy /y ./Darting/runtime/BUILD.gn ./dart_sdk/sdk/runtime/bin/
+      - name: Build Dart Lib
+        run: |
+          cd dart_sdk/sdk
+          python ./tools/build.py --no-goma -m release -a x64 libdart
+          python ./tools/build.py --no-goma -m release -a ia32 libdart
+        
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          cd dart_sdk/sdk/out/
+          git add -f .
+          git commit -m "AutoBuild Windows:`date`"
+          git pull
+  
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PUSH_TOKEN }}
+          branch: ${{ github.event.inputs.push-branch }}
           
+  Build-Mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - name: Init Xcode
+        run: |
+          xcode-select -s /Applications/Xcode.app/Contents/Developer
+      - name: Clone Dart
+        run: |
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          export PATH="$PATH:$PWD/depot_tools"
+          mkdir dart_sdk
+          cd dart_sdk
+          fetch dart
+          gclient sync
+      - name: Clone Patch
+        run: |
+          git clone -b ${{ github.event.inputs.patch-branch }} ${{github.event.inputs.patch-rep}}
+          cp -f ./Darting/BUILD.gn ./dart_sdk/sdk/
+          cp -f ./Darting/runtime/BUILD.gn ./dart_sdk/sdk/runtime/bin/
+      - name: Build Dart Lib
+        run: |
+          cd dart_sdk/sdk
+          python ./tools/build.py --no-goma -m release -a x64 libdart
+          python ./tools/build.py --no-goma -m release -a ia32 libdart
+          python ./tools/build.py --no-goma -m release -a arm libdart
+          python ./tools/build.py --no-goma -m release -a arm64 libdart
+                    
+      - name: Commit
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          cd dart_sdk/sdk/xcodebuild/
+          git add -f .
+          git commit -m "AutoBuild Mac:`date`"
+          git pull
+              
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PUSH_TOKEN }}
+          branch: ${{ github.event.inputs.push-branch }}
