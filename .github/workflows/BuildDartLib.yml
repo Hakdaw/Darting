@@ -77,7 +77,9 @@ jobs:
           pip install httplib2
           pip install six
           mkdir python
-          copy /y C:/hostedtoolcache/windows/Python/3.8.10/x64 ./python/
+          cd python
+          copy /y C:/hostedtoolcache/windows/Python/3.8.10/x64
+          cd ../
           xcopy /y ./subprocess.py ./python/lib/
       - name: Clone Dart
         run: |
