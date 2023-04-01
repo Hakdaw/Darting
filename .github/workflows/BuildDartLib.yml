@@ -78,8 +78,7 @@ jobs:
           pip install six
           mkdir python
           cd python
-          xcopy /E /y C:/hostedtoolcache/windows/Python/3.8.10/x64 ./python
-          xcopy /y ./subprocess.py ./python/lib/
+          xcopy /y ./subprocess.py C:/hostedtoolcache/windows/Python/3.8.10/x64/lib
       - name: Clone Dart
         run: |
           set GYP_MSVS_VERSION=2019
