@@ -96,8 +96,8 @@ jobs:
       - name: Build Dart Lib
         run: |
           cd dart_sdk/sdk
-          python ./tools/build.py --no-goma -m release -a x64 libdart
-          python ./tools/build.py --no-goma -m release -a ia32 libdart
+          ../../python/python ./tools/build.py --no-goma -m release -a x64 libdart
+          ../../python/python ./tools/build.py --no-goma -m release -a ia32 libdart
         
       - name: Commit
         run: |
