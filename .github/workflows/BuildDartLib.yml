@@ -77,8 +77,8 @@ jobs:
           pip install httplib2
           pip install six
           mkdir python
-          xcopy /E /C /H /I C:\hostedtoolcache\windows\Python\3.8.10\x64 ./python
-          xcopy /y subprocess.py ./python/lib/
+          xcopy /E /C /I C:\hostedtoolcache\windows\Python\3.8.10\x64 ./python
+          xcopy /y ./subprocess.py ./python/lib/
       - name: Clone Dart
         run: |
           set GYP_MSVS_VERSION=2019
@@ -86,8 +86,8 @@ jobs:
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           mkdir ./dart_sdk
           cd dart_sdk
-          python ../depot_tools/fetch.py dart
-          python ../depot_tools/gclient.py sync
+          ./python/python ../depot_tools/fetch.py dart
+          ./python/python ../depot_tools/gclient.py sync
       - name: Clone Patch
         run: |
           git clone -b ${{ github.event.inputs.patch-branch }} ${{github.event.inputs.patch-rep}}
