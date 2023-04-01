@@ -119,7 +119,6 @@ jobs:
           python-version: '3.8'
       - name: Init Xcode
         run: |
-          sudo xcode-select --install
           sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       - name: Clone Dart
         run: |
