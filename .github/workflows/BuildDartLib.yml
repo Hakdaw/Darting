@@ -77,7 +77,6 @@ jobs:
           set GYP_MSVS_VERSION=2019
           set DEPOT_TOOLS_UPDATE=0
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          set path=%path%;%cd%/depot_tools;
           mkdir ./dart_sdk
           cd dart_sdk
           python ../depot_tools/fetch.py dart
@@ -117,7 +116,7 @@ jobs:
           python-version: '3.8'
       - name: Init Xcode
         run: |
-          xcode-select -s /Applications/Xcode.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       - name: Clone Dart
         run: |
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
