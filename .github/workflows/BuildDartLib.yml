@@ -73,12 +73,12 @@ jobs:
         with:
           winsdk-build-version: 19041
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{ matrix.arch }}
-          sdk: 10.0.19041.0
-          toolset: 14.22
-          vsversion: 2019
+      #- uses: ilammy/msvc-dev-cmd@v1
+      #  with:
+      #    arch: ${{ matrix.arch }}
+      #    sdk: 10.0.19041.0
+      #    toolset: 14.22
+      #    vsversion: 2019
       - name: Init Python
         run: |
           pip install httplib2
@@ -104,6 +104,7 @@ jobs:
           set GYP_MSVS_VERSION=2019
           set DEPOT_TOOLS_UPDATE=0
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\"
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
           python ./tools/build.py --no-goma -m release -a x86 libdart
