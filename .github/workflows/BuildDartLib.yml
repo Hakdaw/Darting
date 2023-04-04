@@ -83,6 +83,7 @@ jobs:
         run: |
           pip install httplib2
           pip install six
+          pip install urlparse
           xcopy /y ${{ github.workspace }}\subprocess.py C:\hostedtoolcache\windows\Python\3.8.10\x64\lib
       - name: Clone Dart
         run: |
