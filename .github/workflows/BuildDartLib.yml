@@ -47,17 +47,15 @@ jobs:
       
       - name: Commit
         run: |
+          git checkout ${{ github.event.inputs.push-branch }}
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          cd dart_sdk/sdk/out/
+          git rm -r --cached .
+          cd dart_sdk/sdk/xcodebuild/
           git add -f .
           git commit -m "AutoBuild Linux:`date`"
-          git pull
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PUSH_TOKEN }}
-          branch: ${{ github.event.inputs.push-branch }}
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+          git push
 
   Build-Win:
     runs-on: windows-latest
@@ -69,6 +67,15 @@ jobs:
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
+      - uses: seanmiddleditch/gha-setup-vsdevenv@master
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: |
+            x64
+            x86
+          sdk: 10.0.19041.0
+          toolset: 14.0
+          vsversion: 2019
       - name: Init Python
         run: |
           pip install httplib2
@@ -91,24 +98,24 @@ jobs:
           xcopy /y .\Darting\runtime\BUILD.gn .\dart_sdk\sdk\runtime\bin\
       - name: Build Dart Lib
         run: |
+          set GYP_MSVS_VERSION=2019
+          set DEPOT_TOOLS_UPDATE=0
+          set DEPOT_TOOLS_WIN_TOOLCHAIN=0
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
-          python ./tools/build.py --no-goma -m release -a ia32 libdart
+          python ./tools/build.py --no-goma -m release -a x86 libdart
         
       - name: Commit
         run: |
+          git checkout ${{ github.event.inputs.push-branch }}
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          cd dart_sdk/sdk/out/
+          git rm -r --cached .
+          cd dart_sdk/sdk/xcodebuild/
           git add -f .
           git commit -m "AutoBuild Windows:`date`"
-          git pull
-  
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PUSH_TOKEN }}
-          branch: ${{ github.event.inputs.push-branch }}
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+          git push
           
   Build-Mac:
     runs-on: macos-latest
@@ -137,21 +144,18 @@ jobs:
         run: |
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
-          python ./tools/build.py --no-goma -m release -a ia32 libdart
+          python ./tools/build.py --no-goma -m release -a x86 libdart
           python ./tools/build.py --no-goma -m release -a arm libdart
           python ./tools/build.py --no-goma -m release -a arm64 libdart
                     
       - name: Commit
         run: |
+          git checkout ${{ github.event.inputs.push-branch }}
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git rm -r --cached .
           cd dart_sdk/sdk/xcodebuild/
           git add -f .
           git commit -m "AutoBuild Mac:`date`"
-          git pull
-              
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PUSH_TOKEN }}
-          branch: ${{ github.event.inputs.push-branch }}
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+          git push
