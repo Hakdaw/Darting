@@ -69,6 +69,9 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7'
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
@@ -88,14 +91,14 @@ jobs:
           xcopy /y ${{ github.workspace }}\subprocess.py C:\hostedtoolcache\windows\Python\3.8.10\x64\lib
       - name: Clone Dart
         run: |
-          set GYP_MSVS_VERSION=2015
+          set GYP_MSVS_VERSION=2019
           set DEPOT_TOOLS_UPDATE=0
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
           set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\"
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          #cd depot_tools
-          #git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
-          #cd ../
+          cd depot_tools
+          git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
+          cd ../
           mkdir ./dart_sdk
           cd dart_sdk
           ../depot_tools/fetch dart
