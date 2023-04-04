@@ -98,7 +98,7 @@ jobs:
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           cd depot_tools
           git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
-          gclient sync
+          ./gclient.bat sync
           cd ../
           mkdir ./dart_sdk
           cd dart_sdk
