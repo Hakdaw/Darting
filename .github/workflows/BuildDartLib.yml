@@ -90,7 +90,10 @@ jobs:
           set DEPOT_TOOLS_UPDATE=0
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
           set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\"
-          git clone -b 5aa5cd76f00e7774f71367f34d9998cfa0034d04 https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          cd depot_tools
+          git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
+          cd ../
           mkdir ./dart_sdk
           cd dart_sdk
           ../depot_tools/fetch dart
