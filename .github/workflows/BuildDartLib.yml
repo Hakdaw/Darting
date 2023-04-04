@@ -70,6 +70,9 @@ jobs:
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
       - uses: ilammy/msvc-dev-cmd@v1
         with:
+          vsversion: 2015
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
           arch: |
             x64
             x86
