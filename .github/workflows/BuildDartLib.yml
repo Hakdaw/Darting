@@ -74,7 +74,7 @@ jobs:
             x64
             x86
           sdk: 10.0.19041.0
-          toolset: 14.0
+          toolset: 14.22
           vsversion: 2019
       - name: Init Python
         run: |
