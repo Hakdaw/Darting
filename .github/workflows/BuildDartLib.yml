@@ -59,11 +59,11 @@ jobs:
 
   Build-Win:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        arch:
-          - amd64
-          - amd64_x86
+    #strategy:
+    #  matrix:
+    #    arch:
+    #      - amd64
+    #      - amd64_x86
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
