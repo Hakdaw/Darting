@@ -59,6 +59,11 @@ jobs:
 
   Build-Win:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - amd64_x86
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -70,12 +75,7 @@ jobs:
       - uses: seanmiddleditch/gha-setup-vsdevenv@master
       - uses: ilammy/msvc-dev-cmd@v1
         with:
-          vsversion: 2015
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: |
-            x64
-            x86
+          arch: ${{ matrix.arch }}
           sdk: 10.0.19041.0
           toolset: 14.22
           vsversion: 2019
