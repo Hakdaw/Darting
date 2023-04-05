@@ -58,7 +58,7 @@ jobs:
           git push
 
   Build-Win:
-    runs-on: windows-latest
+    runs-on: windows-2019
     #strategy:
     #  matrix:
     #    arch:
@@ -69,39 +69,39 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '2.7'
+      #- uses: actions/setup-python@v4
+      #  with:
+      #    python-version: '2.7'
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
-      - uses: seanmiddleditch/gha-setup-vsdevenv@master
-        with:
-          toolset_version: 14.0
-      #- uses: ilammy/msvc-dev-cmd@v1
+      #- uses: seanmiddleditch/gha-setup-vsdevenv@master
       #  with:
-      #    arch: ${{ matrix.arch }}
-      #    sdk: 10.0.19041.0
-      #    toolset: 14.22
-      #    vsversion: 2019
+      #    toolset_version: 14.0
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64 #${{ matrix.arch }}
+          sdk: 10.0.19041.0
+          toolset: 14.0
+          vsversion: 2015
       - name: Init Python
         run: |
           pip install httplib2
           pip install six
-          xcopy /y ${{ github.workspace }}\subprocess.py C:\hostedtoolcache\windows\Python\3.8.10\x64\lib
+          xcopy /y ${{ github.workspace }}\subprocess.py C:\hostedtoolcache\windows\Python\3.9.13\x64\lib
       - name: Clone Dart
         run: |
-          set GYP_MSVS_VERSION=2019
+          set GYP_MSVS_VERSION=2015
           set DEPOT_TOOLS_UPDATE=0
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
-          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\"
+          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2015\Enterprise\"
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          cd depot_tools
-          git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
-          ./gclient.bat sync
-          cd ../
+          # cd depot_tools
+          # git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
+          # cd ../
           mkdir ./dart_sdk
           cd dart_sdk
+          ../depot_tools/gclient runhooks
           ../depot_tools/fetch dart
           ../depot_tools/gclient sync
       - name: Clone Patch
@@ -117,7 +117,7 @@ jobs:
           set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\"
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
-          python ./tools/build.py --no-goma -m release -a x86 libdart
+          python ./tools/build.py --no-goma -m release -a ia32 libdart
         
       - name: Commit
         run: |
@@ -158,8 +158,6 @@ jobs:
         run: |
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
-          python ./tools/build.py --no-goma -m release -a x86 libdart
-          python ./tools/build.py --no-goma -m release -a arm libdart
           python ./tools/build.py --no-goma -m release -a arm64 libdart
                     
       - name: Commit
