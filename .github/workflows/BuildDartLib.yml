@@ -44,18 +44,22 @@ jobs:
           python ./tools/build.py --no-goma -m release -a ia32 libdart
           python ./tools/build.py --no-goma -m release -a arm libdart
           python ./tools/build.py --no-goma -m release -a arm64 libdart
-      
-      - name: Commit
-        run: |
-          git checkout ${{ github.event.inputs.push-branch }}
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git rm -r --cached .
-          cd dart_sdk/sdk/xcodebuild/
-          git add -f .
-          git commit -m "AutoBuild Linux:`date`"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
-          git push
+      - name: Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: WindowsBuild
+          path: dart_sdk/sdk/out
+      #- name: Commit
+      #  run: |
+      #    git checkout ${{ github.event.inputs.push-branch }}
+      #    git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #    git config --global user.name "github-actions[bot]"
+      #    git rm -r --cached .
+      #    cd dart_sdk/sdk/out/
+      #    git add -f .
+      #    git commit -m "AutoBuild Linux:`date`"
+      #    git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+      #    git push
 
   Build-Win:
     runs-on: windows-2019
@@ -101,6 +105,8 @@ jobs:
           # cd ../
           mkdir ./dart_sdk
           cd dart_sdk
+          DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2015\Enterprise\"
           ../depot_tools/gclient runhooks
           ../depot_tools/fetch dart
           # ../depot_tools/gclient sync
@@ -119,17 +125,22 @@ jobs:
           python ./tools/build.py --no-goma -m release -a x64 libdart
           python ./tools/build.py --no-goma -m release -a ia32 libdart
         
-      - name: Commit
-        run: |
-          git checkout ${{ github.event.inputs.push-branch }}
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git rm -r --cached .
-          cd dart_sdk/sdk/xcodebuild/
-          git add -f .
-          git commit -m "AutoBuild Windows:`date`"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
-          git push
+      - name: Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: WindowsBuild
+          path: dart_sdk/sdk/out
+      #run: |
+          #git checkout ${{ github.event.inputs.push-branch }}
+          #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          #git config --global user.name "github-actions[bot]"
+          #git rm -r --cached .
+          #cd dart_sdk/sdk/out/
+          #git add -f .
+          #git commit -m "AutoBuild Windows:`date`"
+          #git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+          #git push
+          
           
   Build-Mac:
     runs-on: macos-latest
@@ -159,15 +170,20 @@ jobs:
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
           python ./tools/build.py --no-goma -m release -a arm64 libdart
-                    
-      - name: Commit
-        run: |
-          git checkout ${{ github.event.inputs.push-branch }}
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git rm -r --cached .
-          cd dart_sdk/sdk/xcodebuild/
-          git add -f .
-          git commit -m "AutoBuild Mac:`date`"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
-          git push
+         
+      - name: Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: WindowsBuild
+          path: dart_sdk/sdk/xcodebuild
+      #- name: Commit
+      #  run: |
+      #    git checkout ${{ github.event.inputs.push-branch }}
+      #    git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #    git config --global user.name "github-actions[bot]"
+      #    git rm -r --cached .
+      #    cd dart_sdk/sdk/xcodebuild/
+      #    git add -f .
+      #    git commit -m "AutoBuild Mac:`date`"
+      #    git remote set-url origin https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+      #    git push
