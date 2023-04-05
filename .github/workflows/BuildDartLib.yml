@@ -75,15 +75,15 @@ jobs:
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
-      #- uses: seanmiddleditch/gha-setup-vsdevenv@master
-      #  with:
-      #    toolset_version: 14.0
-      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: seanmiddleditch/gha-setup-vsdevenv@master
         with:
-          arch: amd64 #${{ matrix.arch }}
-          sdk: 10.0.19041.0
-          toolset: 14.0
-          vsversion: 2015
+          toolset_version: 14.0
+      #- uses: ilammy/msvc-dev-cmd@v1
+      #  with:
+      #    arch: amd64 #${{ matrix.arch }}
+      #    sdk: 10.0.19041.0
+      #    toolset: 14.0
+      #    vsversion: 2015
       - name: Init Python
         run: |
           pip install httplib2
