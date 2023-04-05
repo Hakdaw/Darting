@@ -102,7 +102,7 @@ jobs:
           mkdir ./dart_sdk
           cd dart_sdk
           ../depot_tools/gclient runhooks
-          # ../depot_tools/fetch dart
+          ../depot_tools/fetch dart
           # ../depot_tools/gclient sync
       - name: Clone Patch
         run: |
