@@ -102,8 +102,8 @@ jobs:
           mkdir ./dart_sdk
           cd dart_sdk
           ../depot_tools/gclient runhooks
-          ../depot_tools/fetch dart
-          ../depot_tools/gclient sync
+          # ../depot_tools/fetch dart
+          # ../depot_tools/gclient sync
       - name: Clone Patch
         run: |
           git clone -b ${{ github.event.inputs.patch-branch }} ${{github.event.inputs.patch-rep}}
