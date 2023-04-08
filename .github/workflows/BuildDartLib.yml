@@ -106,7 +106,7 @@ jobs:
           mkdir ./dart_sdk
           cd dart_sdk
           # ../depot_tools/gclient runhooks
-          python ../depot_tools/fetch.py dart
+          ../depot_tools/fetch dart
           python ../depot_tools/gclient.py sync
       - name: Clone Patch
         run: |
