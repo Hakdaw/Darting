@@ -47,7 +47,7 @@ jobs:
       - name: Result
         uses: actions/upload-artifact@v3
         with:
-          name: WindowsBuild
+          name: LinuxBuild
           path: dart_sdk/sdk/out
       #- name: Commit
       #  run: |
@@ -105,7 +105,7 @@ jobs:
           # cd ../
           mkdir ./dart_sdk
           cd dart_sdk
-          DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          set DEPOT_TOOLS_WIN_TOOLCHAIN=0
           set GYP_MSVS_OVERRIDE_PATH="C:\Program Files\Microsoft Visual Studio\2015\Enterprise\"
           ../depot_tools/gclient runhooks
           ../depot_tools/fetch dart
@@ -171,10 +171,10 @@ jobs:
           python ./tools/build.py --no-goma -m release -a x64 libdart
           python ./tools/build.py --no-goma -m release -a arm64 libdart
          
-      - name: Result
+      - name: Result 
         uses: actions/upload-artifact@v3
         with:
-          name: WindowsBuild
+          name: MacosBuild
           path: dart_sdk/sdk/xcodebuild
       #- name: Commit
       #  run: |
