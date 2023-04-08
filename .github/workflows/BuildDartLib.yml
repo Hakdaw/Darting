@@ -95,10 +95,10 @@ jobs:
           xcopy /y ${{ github.workspace }}\subprocess.py C:\hostedtoolcache\windows\Python\3.9.13\x64\lib
       - name: Clone Dart
         run: |
-          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"
-          set GYP_MSVS_VERSION=2019
-          set DEPOT_TOOLS_UPDATE=0
-          set DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          setx "GYP_MSVS_OVERRIDE_PATH" "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"
+          setx "GYP_MSVS_VERSION" "2019"
+          setx "DEPOT_TOOLS_UPDATE" "0"
+          setx "DEPOT_TOOLS_WIN_TOOLCHAIN" "0"
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           # cd depot_tools
           # git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
@@ -115,10 +115,10 @@ jobs:
           xcopy /y .\Darting\runtime\BUILD.gn .\dart_sdk\sdk\runtime\bin\
       - name: Build Dart Lib
         run: |
-          set GYP_MSVS_OVERRIDE_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"
-          set GYP_MSVS_VERSION=2019
-          set DEPOT_TOOLS_UPDATE=0
-          set DEPOT_TOOLS_WIN_TOOLCHAIN=0
+          setx "GYP_MSVS_OVERRIDE_PATH" "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"
+          setx "GYP_MSVS_VERSION" "2019"
+          setx "DEPOT_TOOLS_UPDATE" "0"
+          setx "DEPOT_TOOLS_WIN_TOOLCHAIN" "0"
           cd dart_sdk/sdk
           python ./tools/build.py --no-goma -m release -a x64 libdart
           python ./tools/build.py --no-goma -m release -a ia32 libdart
