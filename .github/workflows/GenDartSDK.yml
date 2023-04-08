@@ -33,12 +33,8 @@ jobs:
                 cd dart_sdk/sdk
                 rm -rf ".git"
                 cd ../
+                git rm -r --cached .
                 git add .
                 git commit -m "Actions Autogen:`date`"
-                git pull
-
-            - name: Push
-              uses: ad-m/github-push-action@master
-              with:
-                github_token: ${{ secrets.PUSH_TOKEN }}
-                branch: ${{ github.event.inputs.branch }}
+                git remote set-url ${{ github.event.inputs.branch }} https://${{ github.actor }}:${{ secrets.PUSH_TOKEN }}@github.com/${{ github.repository }}
+                git push
