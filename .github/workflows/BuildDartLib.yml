@@ -70,9 +70,9 @@ jobs:
     #      - amd64_x86
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.9'
       #- uses: actions/setup-python@v4
       #  with:
       #    python-version: '2.7'
@@ -115,6 +115,9 @@ jobs:
           setx "DEPOT_TOOLS_UPDATE" "0"
           setx "DEPOT_TOOLS_WIN_TOOLCHAIN" "0"
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          cd depot_tools
+          git checkout 5aa5cd76f00e7774f71367f34d9998cfa0034d04
+          cd ../
           mkdir ./dart_sdk
           cd dart_sdk
           ../depot_tools/fetch dart
