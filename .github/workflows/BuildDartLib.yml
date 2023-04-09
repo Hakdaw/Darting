@@ -92,8 +92,8 @@ jobs:
           sdk: 10.0.19041.0
           toolset: 14.3
           vsversion: 2022
-      - run: |
-          vswhere -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop Microsoft.Component.MSBuild Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core Microsoft.VisualStudio.Component.VC.ATL Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -requiresAny
+      #- run: |
+      #    vswhere -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop Microsoft.Component.MSBuild Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core Microsoft.VisualStudio.Component.VC.ATL Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -requiresAny
       - name: Init Python
         run: |
           pip install httplib2
