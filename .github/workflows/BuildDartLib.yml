@@ -123,7 +123,7 @@ jobs:
           cd dart_sdk
           git clone https://github.com/dart-lang/sdk.git
           cd sdk
-          ../../gclient sync -D
+          ../../depot_tools/gclient sync -D
           cd ../../
       - name: Clone Patch
         run: |
