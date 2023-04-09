@@ -62,7 +62,7 @@ jobs:
       #    git push
 
   Build-Win:
-    runs-on: windows-2019
+    runs-on: windows-latest
     #strategy:
     #  matrix:
     #    arch:
@@ -79,22 +79,22 @@ jobs:
       - uses: fbactions/setup-winsdk@v1
         with:
           winsdk-build-version: 19041
-      # - uses: seanmiddleditch/gha-setup-vsdevenv@master
-      #   with:
-      #     toolset_version: 14.0
+      - uses: seanmiddleditch/gha-setup-vsdevenv@master
+        with:
+          toolset_version: 14.3
 
       #- name: Setup VSWhere.exe
       #  uses: warrenbuckley/Setup-VSWhere@v1
-      - run: |
-          C:
-          cd "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
-          powershell (new-object System.Net.WebClient).DownloadFile('https://github.com/microsoft/vswhere/releases/download/3.1.1/vswhere.exe','vswhere.exe')
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: win64
-          sdk: 10.0.19041.0
-          toolset: 14.3
-          vsversion: 2022
+      #- run: |
+      #    C:
+      #    cd "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
+      #    powershell (new-object System.Net.WebClient).DownloadFile('https://github.com/microsoft/vswhere/releases/download/3.1.1/vswhere.exe','vswhere.exe')
+      # - uses: ilammy/msvc-dev-cmd@v1
+      #  with:
+      #    arch: win64
+      #    sdk: 10.0.19041.0
+      #    toolset: 14.3
+      #    vsversion: 2022
       - run: |
           vswhere -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop Microsoft.Component.MSBuild Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core Microsoft.VisualStudio.Component.VC.ATL Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -requiresAny
       - name: Init Python
