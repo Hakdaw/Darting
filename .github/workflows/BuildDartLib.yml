@@ -85,7 +85,10 @@ jobs:
 
       #- name: Setup VSWhere.exe
       #  uses: warrenbuckley/Setup-VSWhere@v1
-  
+      - run: |
+          C:
+          cd "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
+          curl -O https://github.com/microsoft/vswhere/releases/download/3.1.1/vswhere.exe
       - uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: win64
